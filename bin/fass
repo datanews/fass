@@ -6,5 +6,6 @@ const FASS = require('../lib/fass.js');
 
 var f = new FASS({
   name: 'test',
-  bucket: 'wnyc.test.bucket'
+  bucket: 'wnyc.test.bucket',
+  uploadProfile: 'data'
 });
