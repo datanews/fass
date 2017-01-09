@@ -1,11 +1,56 @@
 #!/usr/bin/env node
 'use strict';
 
-
+// Dependencies
+const command = require('commander');
 const FASS = require('../lib/fass.js');
+const pkg = require('../package.json');
 
-var f = new FASS({
-  name: 'test',
-  bucket: 'wnyc.test.bucket',
-  uploadProfile: 'data'
-});
+
+// Command
+command
+  .version(pkg.version)
+  .description('Periodically take screenshots, pass to Google Vision, and upload to S3. \n  Ensure that the FASS_GOOGLE_VISION_KEY environment variable is set if using computer vision.')
+  .option('-n, --name <name>', 'Name for batch. Required.')
+  .option('-b, --bucket [bucket]', 'Bucket for S3 upload. Required for uploading.')
+  .option('-p, --profile [profile]', 'AWS profile name. Or use environment variables AWS_ACCESS_KEY_ID and AWS_SECRETE_ACCESS_KEY.')
+  .option('-r, --prefix [prefix]', 'Prefix for path to file uploaded. Default to "fass".')
+  .option('-a, --access [type]', 'S3 access type. Defaults to private.  Can be private, public-read, public-read-write, authenticated-read.', /^(private|public-read|public-read-write|authenticated-read)$/i, 'private')
+  .option('-i, --interval [n]', 'Interval in milliseconds. Defaults to 60000.', parseInt)
+  .option('-l, --location [path]', 'Path to store files locally. Defaults to ~/.fass')
+  .option('-u, --upload', 'Upload to S3.  Default.')
+  .option('-U, --no-upload', 'Don\'t upload to S3.')
+  .option('-c, --cv', 'Pass to Google Vision. Default.')
+  .option('-C, --no-cv', 'Don\'t pass to Google Vision.')
+  .parse(process.argv)
+
+// Help by default
+//if (!command.args.length) {
+//  command.help();
+//  process.exit();
+//}
+
+// Validation
+if (!command.name) {
+  quit('--name option is required.')
+}
+
+// Do FASS
+var options = {
+  name: command.name,
+  uploadBucket: command.bucket,
+  uploadProfile: command.profile,
+  upload: command.upload === undefined ? true : command.upload,
+  cv: command.cv === undefined ? true : command.cv,
+  uploadPrefix: command.prefix,
+  uploadAccess: command.access,
+  interval: command.interval,
+  location: command.location
+};
+var f = new FASS(options);
+
+// Quit messaging
+function quit(message) {
+  console.error(message);
+  process.exit(1);
+}
