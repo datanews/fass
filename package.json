@@ -1,0 +1,26 @@
+{
+  "name": "fass",
+  "version": "0.0.1",
+  "description": "Fully-automatic screenshots, Periodically take screenshots and upload to S3.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.wnyc.net:datanews/fass"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-config": "^1.1.0",
+    "aws-sdk": "^2.7.21",
+    "debug": "^2.6.0",
+    "desktop-screenshot": "^0.1.1",
+    "dotenv": "^4.0.0",
+    "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.17.1",
+    "node-cloud-vision-api": "^0.2.0"
+  }
+}

@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+'use strict';
+
+
+const FASS = require('../lib/fass.js');
+
+var f = new FASS({
+  name: 'test',
+  bucket: 'wnyc.test.bucket'
+});
